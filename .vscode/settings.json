@@ -1,0 +1,12 @@
+{
+  "files.insertFinalNewline": true,
+  "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "editor.formatOnSave": true,
+  "eslint.run": "onSave",
+  "editor.rulers": [
+    80
+  ],
+}

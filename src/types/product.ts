@@ -13,9 +13,14 @@ export interface Product {
   created_by: number
   company: number
   category: string
-  images: ProductImage[]
+  // images: ProductImage[]
 }
 
 export interface ProductProps {
   product: Product
+}
+
+export interface ProductWithImagesProps {
+  product: Product
+  images: ProductImage[]
 }

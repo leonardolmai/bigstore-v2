@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Calendar } from 'lucide-react'
 import Forms_Product from './Forms_Product'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie, setCookie, deleteCookie, hasCookie } from 'cookies-next'
 import { Product, ProductProps } from '@/types/product'
 
@@ -64,9 +64,9 @@ export default function Menu_Products({ screens, items, alingLists }) {
       const updatedProductData = {
         is_approved: true,
       }
-      await api.patch(`/products/${product.id}/`, updatedProductData, {
+      await api2.patch(`/products/${product.id}/`, updatedProductData, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -81,9 +81,9 @@ export default function Menu_Products({ screens, items, alingLists }) {
 
   const handleDeleteClick = async (product: Product) => {
     try {
-      await api.delete(`/products/${product.id}/`, {
+      await api2.delete(`/products/${product.id}/`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       })

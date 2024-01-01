@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie } from 'cookies-next'
 
 export default function Employer_forms({ screens, setBoolForms, companyId }) {
@@ -44,12 +44,14 @@ export default function Employer_forms({ screens, setBoolForms, companyId }) {
 
   const handleAddEmployee = async () => {
     try {
-      await api.post(
-        `/companies/${companyId}/employees/`,
-        { email },
+      const emailEncode = encodeURIComponent(email)
+      await api2.post(
+        // `/companies/${companyId}/employees/`,
+        `/companies/employees/?email=${emailEncode}`,
+        // { email },
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )

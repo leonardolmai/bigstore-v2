@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { BadgeDollarSign as Badge } from 'lucide-react'
 import Product_forms from './Product_forms'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie } from 'cookies-next'
 import { Order, OrderItem } from '@/types/orders'
 
@@ -24,9 +24,9 @@ export default function Product({ screens }) {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await api.get('/orders', {
+        const response = await api2.get('/orders', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setOrders(response.data)
@@ -119,82 +119,98 @@ export default function Product({ screens }) {
             <br />
             <tbody>
               {/* Replace the existing map function with the orders map */}
-              {orders.map((order) => (
-                <React.Fragment key={order.id}>
-                  {order.order_items.map((orderItem) => (
-                    <tr
-                      key={orderItem.id}
-                      className={`${
-                        order.id % 2 === 0
-                          ? 'bg-[#F5F6F7]'
-                          : 'b-1 bg-[#b8b8b8] shadow-xl'
-                      } `}
-                    >
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {order.id}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {orderItem.id}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {orderItem.name.length > 15
-                          ? `${orderItem.name.substring(0, 15)}...`
-                          : orderItem.name}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {orderItem.quantity}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {order.company}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {order.status === 'pending' && (
-                          <p className="font-bold text-rose-600">
-                            {order.status}
-                          </p>
-                        )}
-                        {order.status === 'processing' && (
-                          <p className="font-bold text-yellow-500">
-                            {order.status}
-                          </p>
-                        )}
-                        {order.status === 'shiped' && (
-                          <p className="font-bold text-blue-500">
-                            {order.status}
-                          </p>
-                        )}
-                        {order.status === 'delivered' && (
-                          <p className="font-bold text-green-500">
-                            {order.status}
-                          </p>
-                        )}
-                        {order.status === 'returned' && (
-                          <p className="font-bold text-red-500">
-                            {order.status}
-                          </p>
-                        )}
-                        {order.status === 'canceled' && (
-                          <p className="font-bold text-gray-500">
-                            {order.status}
-                          </p>
-                        )}
-                      </td>
-                      <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
-                        {formatDate(order.created_at)}
-                      </td>
-                      <td
-                        className="cursor-pointer items-center break-all border-e-2 p-2 pl-4 text-center md:w-[100px] md:pl-8 lg:w-[130px] lg:pl-12 xl:w-[150px] xl:pl-14 2xl:w-[165px] 2xl:pl-16 "
-                        onClick={() => handleformClick(orderItem)}
-                      >
-                        <Badge
-                          size={24}
-                          className="h-8 w-max cursor-pointer self-center rounded-3xl bg-[#FEBD2F] shadow-md shadow-black hover:stroke-amber-950 hover:shadow-amber-400 active:bg-[#9e7620] active:bg-[#f7aa02]"
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </React.Fragment>
-              ))}
+              {orders.map(async (order) => {
+                const orderItemResponse = await api2.get(
+                  `/orders/${order.id}/order_items/`,
+                  {
+                    headers: {
+                      // eslint-disable-next-line camelcase
+                      Authorization: `Bearer ${getCookie('token')}`,
+                    },
+                  },
+                )
+                const orderItems = orderItemResponse.data
+
+                if (orderItems.length > 0) {
+                  return (
+                    <React.Fragment key={order.id}>
+                      {order.order_items.map((orderItem) => (
+                        <tr
+                          key={orderItem.id}
+                          className={`${
+                            order.id % 2 === 0
+                              ? 'bg-[#F5F6F7]'
+                              : 'b-1 bg-[#b8b8b8] shadow-xl'
+                          } `}
+                        >
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {order.id}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {orderItem.id}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {orderItem.name.length > 15
+                              ? `${orderItem.name.substring(0, 15)}...`
+                              : orderItem.name}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {orderItem.quantity}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {order.company}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {order.status === 'pending' && (
+                              <p className="font-bold text-rose-600">
+                                {order.status}
+                              </p>
+                            )}
+                            {order.status === 'processing' && (
+                              <p className="font-bold text-yellow-500">
+                                {order.status}
+                              </p>
+                            )}
+                            {order.status === 'shiped' && (
+                              <p className="font-bold text-blue-500">
+                                {order.status}
+                              </p>
+                            )}
+                            {order.status === 'delivered' && (
+                              <p className="font-bold text-green-500">
+                                {order.status}
+                              </p>
+                            )}
+                            {order.status === 'returned' && (
+                              <p className="font-bold text-red-500">
+                                {order.status}
+                              </p>
+                            )}
+                            {order.status === 'canceled' && (
+                              <p className="font-bold text-gray-500">
+                                {order.status}
+                              </p>
+                            )}
+                          </td>
+                          <td className="break-all border-e-2 p-2 text-center md:w-[100px] lg:w-[130px] xl:w-[150px] 2xl:w-[165px]">
+                            {formatDate(order.created_at)}
+                          </td>
+                          <td
+                            className="cursor-pointer items-center break-all border-e-2 p-2 pl-4 text-center md:w-[100px] md:pl-8 lg:w-[130px] lg:pl-12 xl:w-[150px] xl:pl-14 2xl:w-[165px] 2xl:pl-16 "
+                            onClick={() => handleformClick(orderItem)}
+                          >
+                            <Badge
+                              size={24}
+                              className="h-8 w-max cursor-pointer self-center rounded-3xl bg-[#FEBD2F] shadow-md shadow-black hover:stroke-amber-950 hover:shadow-amber-400 active:bg-[#9e7620] active:bg-[#f7aa02]"
+                            />
+                          </td>
+                        </tr>
+                      ))}
+                    </React.Fragment>
+                  )
+                }
+                return <></>
+              })}
             </tbody>
           </table>
         </div>

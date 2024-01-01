@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Cards } from '@/types/cards'
 import { getCookie } from 'cookies-next'
 const queryClient = new QueryClient()
@@ -58,8 +58,8 @@ export function Payment({ onPaymentOptionChange }) {
   async function fetchCreditCards() {
     const token = getCookie('token')
     try {
-      const response = await api.get('/cards/', {
-        headers: { Authorization: `Token ${token}` },
+      const response = await api2.get('/cards/', {
+        headers: { Authorization: `Bearer ${token}` },
       })
       const fetchedCreditCards: Cards[] = response.data
       return fetchedCreditCards

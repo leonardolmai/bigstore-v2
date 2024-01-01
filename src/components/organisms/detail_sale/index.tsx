@@ -4,9 +4,12 @@ import { useRouter } from 'next/navigation'
 import { B_forms } from '@/components/atoms/buttons'
 import Freight from '@/components/molecules/freight'
 import { Counter } from '@/components/molecules/CountValue/'
-import { ProductProps } from '@/types/product'
+import { ProductWithImagesProps } from '@/types/product'
 
-export default function DetailSale({ product }: ProductProps) {
+export default function DetailSale({
+  product,
+  images,
+}: ProductWithImagesProps) {
   const [QuantitySelect, setQuantitySelect] = useState(1)
   const router = useRouter()
 
@@ -18,6 +21,7 @@ export default function DetailSale({ product }: ProductProps) {
     const cartItem = {
       QuantitySelect,
       product,
+      images,
     }
 
     // Armazenar cartItem no localStorage
@@ -27,6 +31,7 @@ export default function DetailSale({ product }: ProductProps) {
     const cartItem = {
       QuantitySelect,
       product,
+      images,
     }
     localStorage.setItem(product.id.toString(), JSON.stringify(cartItem))
     router.push('/cart')

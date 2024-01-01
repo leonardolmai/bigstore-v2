@@ -2,5 +2,16 @@ import axios from 'axios'
 
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASEURL,
-  headers: { 'X-Company-CNPJ': process.env.NEXT_PUBLIC_COMPANY_CNPJ },
+  headers: {
+    // 'Access-Control-Allow-Origin': '*',
+    'X-Company-CNPJ': process.env.NEXT_PUBLIC_COMPANY_CNPJ,
+  },
+})
+
+export const api2 = axios.create({
+  baseURL: 'http://0.0.0.0:8002',
+  headers: {
+    // 'Access-Control-Allow-Origin': '*',
+    'X-Company-CNPJ': process.env.NEXT_PUBLIC_COMPANY_CNPJ,
+  },
 })

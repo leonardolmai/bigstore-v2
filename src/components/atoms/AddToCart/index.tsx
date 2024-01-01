@@ -1,12 +1,13 @@
 'use client'
-import { ProductProps } from '@/types/product'
+import { ProductWithImagesProps } from '@/types/product'
 import { LuPlus, LuShoppingCart } from 'react-icons/lu'
 
-export function AddToCart({ product }: ProductProps) {
+export function AddToCart({ product, images }: ProductWithImagesProps) {
   const handleAddToCart = () => {
     const cartItem = {
       QuantitySelect: 1,
       product,
+      images,
     }
     localStorage.setItem(product.id.toString(), JSON.stringify(cartItem))
   }

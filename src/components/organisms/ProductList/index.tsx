@@ -5,7 +5,7 @@ import { Product } from '@/types/product'
 import { api } from '@/utils/api'
 
 export async function ProductList() {
-  const response = await api.get('/products')
+  const response = await api.get('/2/products')
 
   const products: Product[] = response.data
 
@@ -13,9 +13,17 @@ export async function ProductList() {
     <section>
       <ProductFilter />
       <div className="m-auto grid max-w-7xl grid-cols-[repeat(auto-fit,minmax(250px,1fr))] justify-between gap-10 text-black">
-        {products.map((product: Product) => {
-          if (product.images.length > 0) {
-            return <ProductCard key={product.id} product={product} />
+        {products.map(async (product: Product) => {
+          const imageResponse = await api.get(
+            `/2/products/${product.id}/images`,
+          )
+          // const images: ProductImageOut[] = imageResponse.data
+          const images = imageResponse.data
+
+          if (images.length > 0 && product.quantity > 0) {
+            return (
+              <ProductCard key={product.id} product={product} images={images} />
+            )
           }
           return <></>
         })}

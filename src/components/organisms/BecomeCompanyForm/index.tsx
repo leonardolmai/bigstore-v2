@@ -1,9 +1,9 @@
 'use client'
+import axios, { AxiosError } from 'axios'
 import { getCookie } from 'cookies-next'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { AxiosError } from 'axios'
 import { FormSubmitButton } from '@/components/atoms/FormSubmitButton'
 import { FormErrorMessage } from '@/components/atoms/FormErrorMessage'
 import { FormInput } from '@/components/atoms/FormInput'
@@ -20,15 +20,30 @@ export function BecomeCompanyForm() {
     event.preventDefault()
     const token = getCookie('token')
 
+    alert(token)
+
     try {
-      const response = await api.post(
+      // const response = await api.post(
+      //   '/2/companies/',
+      //   {
+      //     name,
+      //     cnpj,
+      //   },
+      //   {
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   },
+      // )
+      const response = await api2.post(
         '/companies/',
         {
           name,
           cnpj,
         },
         {
-          headers: { Authorization: `Token ${token}` },
+          headers: {
+            Authorization: `Bearer ${token}`,
+            // 'Access-Control-Allow-Origin': '*',
+          },
         },
       )
 

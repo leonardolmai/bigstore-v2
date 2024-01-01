@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Cards } from '@/types/cards'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { getCookie } from 'cookies-next'
@@ -7,8 +7,11 @@ import { getCookie } from 'cookies-next'
 // Função para buscar os cartões da API
 async function fetchCreditCards() {
   try {
-    const response = await api.get('/cards/', {
-      headers: { Authorization: `Token ${getCookie('token')}` },
+    const response = await api2.get('/cards/', {
+      headers: {
+        Authorization: `Bearer ${getCookie('token')}`,
+        // 'Access-Control-Allow-Origin': '*',
+      },
     })
     const fetchedCreditCards: Cards[] = response.data
     return fetchedCreditCards
@@ -50,9 +53,9 @@ export function User_Cards({ screens }) {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await api.get('/cards/', {
+        const response = await api2.get('/cards/', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         const fetchedCreditCards: Cards[] = response.data
@@ -66,7 +69,7 @@ export function User_Cards({ screens }) {
 
   const handleCreateCard = async () => {
     try {
-      const response = await api.post(
+      const response = await api2.post(
         '/cards/',
         {
           name: updatedName,
@@ -77,7 +80,7 @@ export function User_Cards({ screens }) {
         },
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -106,12 +109,12 @@ export function User_Cards({ screens }) {
       }
 
       // Fazer a requisição PATCH para atualizar o cartão
-      const response = await api.patch(
+      const response = await api2.patch(
         `/cards/${selectcard.id}/`,
         updatedCardData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -182,9 +185,9 @@ export function User_Cards({ screens }) {
 
   const fetchCardDetails = async (cardId: number) => {
     try {
-      const response = await api.get(`/cards/${cardId}`, {
+      const response = await api2.get(`/cards/${cardId}`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
 
@@ -217,9 +220,9 @@ export function User_Cards({ screens }) {
 
   const toformDelete = async (cardId: number) => {
     try {
-      const response = await api.delete(`/cards/${cardId}`, {
+      const response = await api2.delete(`/cards/${cardId}`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
       window.location.href = '/account'

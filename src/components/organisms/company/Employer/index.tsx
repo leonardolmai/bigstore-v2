@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { UserCompany } from '@/types/usercompany'
 import { BadgeX as Badge, PlusCircle } from 'lucide-react'
 import Employer_forms from './Employer_forms'
@@ -11,9 +11,10 @@ const useFetchEmployees = (companyId: number) => {
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
-        const response = await api.get(`/companies/${companyId}/employees`, {
+        // const response = await api2.get(`/companies/${companyId}/employees`, {
+        const response = await api2.get(`/companies/employees`, {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setEmployees(response.data)
@@ -36,9 +37,9 @@ export default function Employer({ screens }) {
   useEffect(() => {
     const fetchCompany = async () => {
       try {
-        const response = await api.get(`/companies/me`, {
+        const response = await api2.get(`/companies/me`, {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setCompanyId(response.data[0].id)
@@ -52,9 +53,10 @@ export default function Employer({ screens }) {
 
   const handleDelete = async (email: string) => {
     try {
-      await api.delete(`/companies/${companyId}/employees`, {
+      // await api.delete(`/companies/${companyId}/employees`, {
+      await api2.delete(`/companies/employees`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
         data: {
           email,

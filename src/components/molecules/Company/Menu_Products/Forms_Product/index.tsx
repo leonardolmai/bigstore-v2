@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { B_carousel } from '@/components/atoms/buttons'
 import { getCookie, setCookie } from 'cookies-next'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Product } from '@/types/product'
 
 // label, name, id, style, size, value, onChange
@@ -41,17 +41,17 @@ export default function Forms_Product({ screens }) {
   useEffect(() => {
     const CNPJinfo = async () => {
       try {
-        const console = await api.get(
+        const console = await api2.get(
           `/companies/${productDetails?.company}/`,
           {
             headers: {
-              Authorization: `Token ${getCookie('token')}`,
+              Authorization: `Bearer ${getCookie('token')}`,
             },
           },
         )
-        const console1 = await api.get(`/users/${productDetails?.company}/`, {
+        const console1 = await api2.get(`/users/${productDetails?.company}/`, {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setCnpjCompany(console.data.cnpj)
@@ -138,12 +138,12 @@ export default function Forms_Product({ screens }) {
       const updatedProductData = {
         is_approved: true,
       }
-      await api.patch(
+      await api2.patch(
         `/products/${getCookie('select_product')}/`,
         updatedProductData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
             'Content-Type': 'multipart/form-data',
           },
         },
@@ -159,9 +159,9 @@ export default function Forms_Product({ screens }) {
 
   const handleDeleteClick = async () => {
     try {
-      await api.delete(`/products/${getCookie('select_product')}/`, {
+      await api2.delete(`/products/${getCookie('select_product')}/`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       })

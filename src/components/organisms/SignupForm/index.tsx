@@ -10,8 +10,10 @@ import { FormInput } from '@/components/atoms/FormInput'
 import { ButtonGoogle } from '@/components/atoms/ButtonGoogle'
 
 export function SignupForm() {
+  const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nameError, setNameError] = useState('')
   const [emailError, setEmailError] = useState('')
   const [passwordError, setPasswordError] = useState('')
   const [generalError, setGeneralError] = useState('')
@@ -21,12 +23,13 @@ export function SignupForm() {
     event.preventDefault()
 
     try {
-      const response = await api.post('/users/', { email, password })
+      const response = await api.post('/2/users/', { name, email, password })
 
       if (response.status === 201) {
         router.push('/login')
       }
     } catch (error: Error | AxiosError) {
+      setEmailError(error.response.data?.email?.[0])
       setEmailError(error.response.data?.email?.[0])
       setPasswordError(error.response.data?.password?.[0])
 
@@ -44,6 +47,12 @@ export function SignupForm() {
       <ButtonGoogle />
       <form onSubmit={handleSignup} className="flex w-full flex-col">
         {generalError && <FormErrorMessage>{generalError}</FormErrorMessage>}
+        <FormInput
+          type="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Name"
+        />
         <FormInput
           type="email"
           value={email}

@@ -22,7 +22,7 @@ const Carousel = ({ product, images }: ProductWithImagesProps) => {
   return (
     <div
       style={{
-        backgroundImage: `url(http://0.0.0.0:8002/${slides[currentIndex]?.url})`,
+        backgroundImage: `url(http://127.0.0.1:8002/${slides[currentIndex]?.url})`,
       }}
       className="h-full w-full rounded-2xl bg-cover bg-center duration-500"
     >

@@ -298,7 +298,7 @@ export function LocalStorageData() {
                       <div className="items-center">
                         <Link href={`products / ${item.key} `} className="item">
                           <Image
-                            src={'http://0.0.0.0:8002/' + firstImage}
+                            src={'http://127.0.0.1:8002/' + firstImage}
                             width={'50'}
                             height={'50'}
                             className="max-w-[50px] rounded-xl"

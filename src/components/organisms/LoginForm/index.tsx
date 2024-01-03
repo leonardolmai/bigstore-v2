@@ -32,7 +32,7 @@ export function LoginForm() {
       //   },
       // })
       const response = await axios.post(
-        'http://0.0.0.0:8000/gateway/2/token/',
+        'http://127.0.0.1:8000/gateway/2/token/',
         formData,
         {
           headers: {
@@ -64,7 +64,7 @@ export function LoginForm() {
       // })
       const {
         data: { type },
-      } = await axios.get('http://0.0.0.0:8002/users/type/', {
+      } = await axios.get('http://127.0.0.1:8002/users/type/', {
         headers: {
           // eslint-disable-next-line camelcase
           Authorization: `Bearer ${access_token}`,

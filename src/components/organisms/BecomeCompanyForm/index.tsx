@@ -1,7 +1,7 @@
 'use client'
 import axios, { AxiosError } from 'axios'
 import { getCookie } from 'cookies-next'
-import { api, api2 } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { FormSubmitButton } from '@/components/atoms/FormSubmitButton'
@@ -33,7 +33,7 @@ export function BecomeCompanyForm() {
       //     headers: { Authorization: `Bearer ${token}` },
       //   },
       // )
-      const response = await api2.post(
+      const response = await api3.post(
         '/companies/',
         {
           name,

@@ -26,12 +26,21 @@ export function LoginForm() {
       formData.append('username', email)
       formData.append('password', password)
 
-      const response = await api.post('/2/token/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
+      // const response = await api.post('/2/token/', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // })
+      const response = await axios.post(
+        'http://0.0.0.0:8000/gateway/2/token/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-Company-CNPJ': '000',
+          },
         },
-      })
-
+      )
       // eslint-disable-next-line camelcase
       const { access_token } = response.data
       console.log(access_token)
@@ -45,12 +54,21 @@ export function LoginForm() {
       //     // payload: '',
       //   },
       // })
+      // const {
+      //   data: { type },
+      // } = await api2.get('/users/type/', {
+      //   headers: {
+      //     // eslint-disable-next-line camelcase
+      //     Authorization: `Bearer ${access_token}`,
+      //   },
+      // })
       const {
         data: { type },
-      } = await api2.get('/users/type/', {
+      } = await axios.get('http://0.0.0.0:8002/users/type/', {
         headers: {
           // eslint-disable-next-line camelcase
           Authorization: `Bearer ${access_token}`,
+          'X-Company-CNPJ': '000',
         },
       })
 

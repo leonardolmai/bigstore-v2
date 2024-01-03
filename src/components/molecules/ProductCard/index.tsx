@@ -11,7 +11,7 @@ export function ProductCard({ product, images }: ProductWithImagesProps) {
           <div className="relative">
             <Image
               className="h-52 w-full rounded-t-lg object-cover"
-              src={'http://0.0.0.0:8000/gateway/2/' + images[0].image}
+              src={'http://commerce-ms:8002/' + images[0].image}
               alt={product.name}
               width={300}
               height={220}

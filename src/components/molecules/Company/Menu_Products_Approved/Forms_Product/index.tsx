@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { B_carousel } from '@/components/atoms/buttons'
 import { getCookie, setCookie } from 'cookies-next'
-import { api, api2 } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import { Product } from '@/types/product'
 
 // label, name, id, style, size, value, onChange
@@ -23,7 +23,7 @@ export default function Forms_Product_approved({ screens }) {
   useEffect(() => {
     const getProductDetails = async () => {
       try {
-        const response = await api.get(
+        const response = await api3.get(
           `/products/${getCookie('select_product')}/`,
         )
         const selectedProduct = response.data
@@ -39,7 +39,7 @@ export default function Forms_Product_approved({ screens }) {
   useEffect(() => {
     const CNPJinfo = async () => {
       try {
-        const console = await api2.get(
+        const console = await api3.get(
           `/companies/${productDetails?.company}/`,
           {
             headers: {
@@ -47,7 +47,7 @@ export default function Forms_Product_approved({ screens }) {
             },
           },
         )
-        const console1 = await api2.get(`/users/${productDetails?.company}/`, {
+        const console1 = await api3.get(`/users/${productDetails?.company}/`, {
           headers: {
             Authorization: `Bearer ${getCookie('token')}`,
           },
@@ -136,7 +136,7 @@ export default function Forms_Product_approved({ screens }) {
       const updatedProductData = {
         is_approved: false,
       }
-      await api2.patch(
+      await api3.patch(
         `/products/${getCookie('select_product')}/`,
         updatedProductData,
         {
@@ -157,7 +157,7 @@ export default function Forms_Product_approved({ screens }) {
 
   const handleDeleteClick = async () => {
     try {
-      await api2.delete(`/products/${getCookie('select_product')}/`, {
+      await api3.delete(`/products/${getCookie('select_product')}/`, {
         headers: {
           Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',

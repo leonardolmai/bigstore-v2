@@ -1,16 +1,16 @@
 import CarouselComponent from '@/components/organisms/carousel'
 import Detail_sale from '@/components/organisms/detail_sale'
 import { Product } from '@/types/product'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 
 export default function Products({ params }: { params: { slug: string } }) {
   const fetchProduct = async () => {
     try {
-      const response = await api.get<Product>(`/2/products/${params.slug}/`)
+      const response = await api2.get<Product>(`/products/${params.slug}/`)
       const fetchedProduct = response.data
 
-      const imageResponse = await api.get(
-        `/2/products/${fetchedProduct.id}/images`,
+      const imageResponse = await api2.get(
+        `/products/${fetchedProduct.id}/images`,
       )
       const images = imageResponse.data
 

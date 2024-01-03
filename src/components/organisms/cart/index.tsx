@@ -7,7 +7,7 @@ import { Trash2 as Trash } from 'lucide-react'
 import InputField from '@/components/atoms/inputs'
 import PaymentWithQueryClientProvider from '@/components/molecules/payment'
 import { hasCookie, getCookie } from 'cookies-next'
-import { api, api2 } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import Freight_router from '@/components/molecules/freight_router'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -153,7 +153,7 @@ export function LocalStorageData() {
             products: selectedProducts,
           }
 
-    api2
+    api3
       .post('/orders/', orderData, { headers })
       .then((response) => {
         // Processar a resposta do servidor, se necessário
@@ -240,7 +240,7 @@ export function LocalStorageData() {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const response = await api2.get('/addresses/', {
+        const response = await api3.get('/addresses/', {
           headers: {
             Authorization: `Bearer ${accessToken}`,
           },
@@ -298,7 +298,7 @@ export function LocalStorageData() {
                       <div className="items-center">
                         <Link href={`products / ${item.key} `} className="item">
                           <Image
-                            src={'http://0.0.0.0:8000/gateway/2/' + firstImage}
+                            src={'http://0.0.0.0:8002/' + firstImage}
                             width={'50'}
                             height={'50'}
                             className="max-w-[50px] rounded-xl"

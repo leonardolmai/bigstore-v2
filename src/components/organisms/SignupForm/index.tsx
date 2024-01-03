@@ -1,5 +1,5 @@
 'use client'
-import { api } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import { FormEvent, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AxiosError } from 'axios'
@@ -23,7 +23,7 @@ export function SignupForm() {
     event.preventDefault()
 
     try {
-      const response = await api.post('/2/users/', { name, email, password })
+      const response = await api3.post('/users/', { name, email, password })
 
       if (response.status === 201) {
         router.push('/login')

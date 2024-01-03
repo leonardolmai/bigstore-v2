@@ -37,7 +37,7 @@ export default function Menu_Products({ screens, items, alingLists }) {
 
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/products/')
+        const response = await api2.get('/products/')
         setProducts(response.data)
       } catch (error) {
         console.error('Error fetching products:', error)

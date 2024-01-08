@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
 import { UserId } from '@/types/user'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie } from 'cookies-next'
 
 export async function userlogin(setUserData) {
   if (typeof window !== 'undefined') {
     try {
-      const response = await api.get('/users/', {
+      const response = await api2.get('/users/', {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
       setUserData(response.data[0]) // Atualiza o estado userData com os dados do usuário
@@ -32,9 +32,9 @@ export default function Settings_User({ screens }) {
     if (typeof window !== 'undefined') {
       ;async () => {
         try {
-          const response = await api.get(`/users/${userData?.id}/`, {
+          const response = await api2.get(`/users/${userData?.id}/`, {
             headers: {
-              Authorization: `Token ${getCookie('token')}`,
+              Authorization: `Bearer ${getCookie('token')}`,
             },
           })
           setUserIdData(response.data) // Atualiza o estado userData com os dados do usuário
@@ -55,12 +55,12 @@ export default function Settings_User({ screens }) {
         email: userData?.email,
         phone: userData?.phone,
       }
-      const response = await api.patch(
+      const response = await api2.patch(
         `/users/${userData?.id}/`,
         updateAccountData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -88,12 +88,12 @@ export default function Settings_User({ screens }) {
         phone: userData?.phone,
       }
       if (oldEmail === userData?.email) {
-        const response = await api.patch(
+        const response = await api2.patch(
           `/users/${userData?.id}/`,
           updateAccountData,
           {
             headers: {
-              Authorization: `Token ${getCookie('token')}`,
+              Authorization: `Bearer ${getCookie('token')}`,
             },
           },
         )
@@ -122,12 +122,12 @@ export default function Settings_User({ screens }) {
         email: userData?.email,
         phone: newNumber || userData?.phone,
       }
-      const response = await api.patch(
+      const response = await api2.patch(
         `/users/${userData?.id}/`,
         updateAccountData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -154,12 +154,12 @@ export default function Settings_User({ screens }) {
         email: userData?.email,
         phone: userData?.phone,
       }
-      const response = await api.patch(
+      const response = await api2.patch(
         `/users/${userData?.id}/`,
         updateAccountData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -189,12 +189,12 @@ export default function Settings_User({ screens }) {
         phone: userData?.name,
       }
       if (oldpassword != '') {
-        const response = await api.patch(
+        const response = await api2.patch(
           `/users/${userData?.id}/`,
           updateAccountData,
           {
             headers: {
-              Authorization: `Token ${getCookie('token')}`,
+              Authorization: `Bearer ${getCookie('token')}`,
             },
           },
         )

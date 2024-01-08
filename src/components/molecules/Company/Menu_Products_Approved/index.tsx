@@ -2,7 +2,7 @@
 import { Calendar } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import Forms_Product from './Forms_Product'
-import { api } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import { getCookie, setCookie, deleteCookie, hasCookie } from 'cookies-next'
 import { Product, ProductProps } from '@/types/product'
 
@@ -39,7 +39,7 @@ export default function Menu_Products({ screens, items, alingLists }) {
 
     const fetchProducts = async () => {
       try {
-        const response = await api.get('/products/')
+        const response = await api3.get('/products/')
         setProducts(response.data)
       } catch (error) {
         console.error('Error fetching products:', error)
@@ -66,9 +66,9 @@ export default function Menu_Products({ screens, items, alingLists }) {
       const updatedProductData = {
         is_approved: false,
       }
-      await api.patch(`/products/${product.id}/`, updatedProductData, {
+      await api3.patch(`/products/${product.id}/`, updatedProductData, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       })
@@ -83,9 +83,9 @@ export default function Menu_Products({ screens, items, alingLists }) {
 
   const handleDeleteClick = async (product: Product) => {
     try {
-      await api.delete(`/products/${product.id}/`, {
+      await api3.delete(`/products/${product.id}/`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
           'Content-Type': 'multipart/form-data',
         },
       })

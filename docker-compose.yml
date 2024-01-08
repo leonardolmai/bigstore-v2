@@ -1,0 +1,87 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:14.10-alpine
+    environment:
+      - POSTGRES_DB=bigstore
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=sql
+    volumes:
+      - ecommerce-data:/var/lib/postgresql/data/
+    ports:
+      - "5433:5432"
+    networks:
+      - ecommerce-network
+  auth-ms:
+    build:
+      context: ./bigstore-auth-ms
+      dockerfile: Dockerfile
+    volumes:
+      - ecommerce-data:/data
+    networks:
+      - ecommerce-network
+    ports:
+      - "8001:8001"
+    environment:
+      - DATABASE_URL=postgresql://postgres:sql@db/bigstore
+    depends_on:
+      - db
+  commerce-ms:
+    build:
+      context: ./bigstore-commerce-ms
+      dockerfile: Dockerfile
+    volumes:
+      - ecommerce-data:/data
+    networks:
+      - ecommerce-network
+    ports:
+      - "8002:8002"
+    environment:
+      - DATABASE_URL=postgresql://postgres:sql@db/bigstore
+    depends_on:
+      - db
+  gateway:
+    build:
+      context: ./bigstore-gateway
+      dockerfile: Dockerfile
+    volumes:
+      - ecommerce-data:/data
+    networks:
+      - ecommerce-network
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:sql@db/bigstore
+    depends_on:
+      - db
+      - auth-ms
+      - commerce-ms
+  front:
+    build:
+      context: ./bigstore-v2
+      dockerfile: Dockerfile
+    volumes:
+      - ecommerce-data:/data
+    networks:
+      - ecommerce-network
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:sql@db/bigstore
+      # - NEXT_PUBLIC_BASEURL=http://gateway:8000/gateway
+      # - NEXT_PUBLIC_BASEURL_3=http://commerce-ms:8002
+      # - NEXT_PUBLIC_BASEURL=http://172.21.0.5:8000/gateway
+      - NEXT_PUBLIC_BASEURL_2=http://commerce-ms:8002
+    depends_on:
+      - db
+      - gateway
+      - auth-ms
+      - commerce-ms
+
+volumes:
+  ecommerce-data:
+
+
+networks:
+  ecommerce-network:

@@ -1,10 +1,10 @@
 'use client'
 import { setCookie } from 'cookies-next'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { FormEvent, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { ButtonGoogle } from '@/components/atoms/ButtonGoogle'
 import { FormSubmitButton } from '@/components/atoms/FormSubmitButton'
 import { FormErrorMessage } from '@/components/atoms/FormErrorMessage'
@@ -22,21 +22,62 @@ export function LoginForm() {
     event.preventDefault()
 
     try {
-      const response = await api.post('/auth-token/', {
-        username: email,
-        password,
-      })
-      const { token } = response.data
-      setCookie('token', token, { maxAge: 60 * 60 * 24 * 30 })
+      const formData = new FormData()
+      formData.append('username', email)
+      formData.append('password', password)
+
+      // const response = await api.post('/2/token/', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data',
+      //   },
+      // })
+      const response = await axios.post(
+        'http://127.0.0.1:8000/gateway/2/token/',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'X-Company-CNPJ': '000',
+          },
+        },
+      )
+      // eslint-disable-next-line camelcase
+      const { access_token } = response.data
+      console.log(access_token)
+
+      setCookie('token', access_token, { maxAge: 60 * 60 * 24 * 30 })
+      // const {
+      //   data: { type },
+      // } = await api.get('/2/users/type/', {
+      //   headers: {
+      //     Authorization: `Bearer ${access_token}`,
+      //     // payload: '',
+      //   },
+      // })
+      // const {
+      //   data: { type },
+      // } = await api2.get('/users/type/', {
+      //   headers: {
+      //     // eslint-disable-next-line camelcase
+      //     Authorization: `Bearer ${access_token}`,
+      //   },
+      // })
       const {
         data: { type },
-      } = await api.get('/users/type/', {
-        headers: { Authorization: `Token ${token}` },
+      } = await axios.get('http://127.0.0.1:8002/users/type/', {
+        headers: {
+          // eslint-disable-next-line camelcase
+          Authorization: `Bearer ${access_token}`,
+          'X-Company-CNPJ': '000',
+        },
       })
 
       setCookie('typeUser', type, { maxAge: 60 * 60 * 24 * 30 })
       router.push('/')
     } catch (error: Error | AxiosError) {
+      console.log('jkjjjajdje')
+
+      console.log(error)
       setEmailError(error.response.data?.username)
       setPasswordError(error.response.data?.password)
       setGeneralError(error.response.data?.detail)

@@ -1,9 +1,9 @@
 import { AddToCart } from '@/components/atoms/AddToCart'
-import { ProductProps } from '@/types/product'
+import { ProductWithImagesProps } from '@/types/product'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export function ProductCard({ product }: ProductProps) {
+export function ProductCard({ product, images }: ProductWithImagesProps) {
   return (
     <div>
       <div className="m-auto rounded-lg border border-gray-200 bg-white shadow transition-shadow hover:shadow-lg">
@@ -11,7 +11,7 @@ export function ProductCard({ product }: ProductProps) {
           <div className="relative">
             <Image
               className="h-52 w-full rounded-t-lg object-cover"
-              src={product.images[0].image}
+              src={'http://commerce-ms:8002/' + images[0].image}
               alt={product.name}
               width={300}
               height={220}
@@ -34,7 +34,7 @@ export function ProductCard({ product }: ProductProps) {
                 })}
               </span>
             </Link>
-            <AddToCart product={product} />
+            <AddToCart product={product} images={images} />
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { BadgeX as Badge, Calendar } from 'lucide-react'
 
 import React, { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Company } from '@/types/companies'
 import { getCookie } from 'cookies-next'
 
@@ -17,9 +17,9 @@ export default function Menu_componente({ screens, alingLists }) {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await api.get('/companies', {
+        const response = await api2.get('/companies', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setCompanies(response.data)
@@ -76,9 +76,9 @@ export default function Menu_componente({ screens, alingLists }) {
 
   const fetchCompanyStatus = async (id) => {
     try {
-      const response = await api.get(`/companies/${id}/`, {
+      const response = await api2.get(`/companies/${id}/`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
 
@@ -108,14 +108,14 @@ export default function Menu_componente({ screens, alingLists }) {
 
   const revokeCompany = async (companyj) => {
     try {
-      await api.patch(
+      await api2.patch(
         `/companies/${companyj.id}/`,
         {
           is_active: false,
         },
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -124,6 +124,7 @@ export default function Menu_componente({ screens, alingLists }) {
         prevCompanies.map((company) => {
           if (company.id === companyj.id) {
             return { ...company, is_active: false }
+            // return { ...company, is_approved: false }
           }
           return company
         }),

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie, hasCookie } from 'cookies-next'
 import { ProductImage } from '@/types/product' // Certifique-se de importar corretamente a interface ProductImage
 import Modal from 'react-modal'
@@ -68,9 +68,9 @@ export default function Formulario({ screens }) {
           formData.append('images', images[i])
         }
 
-        const response = await api.post('/products/', formData, {
+        const response = await api2.post('/products/', formData, {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
             'Content-Type': 'multipart/form-data',
           },
         })

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { getCookie } from 'cookies-next'
 
 export default function Settings_Company({ screens }) {
@@ -12,9 +12,9 @@ export default function Settings_Company({ screens }) {
   useEffect(() => {
     const activecompanyinfo = async () => {
       try {
-        const response = await api.get('companies/me', {
+        const response = await api2.get('/companies/me', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setCompanyName(response.data[0].name)
@@ -60,12 +60,12 @@ export default function Settings_Company({ screens }) {
   const handlePatchCompany = async () => {
     if (typeof window !== 'undefined') {
       try {
-        await api.patch(
+        await api2.patch(
           '/companies/1/',
           { name: companyName, cnpj },
           {
             headers: {
-              Authorization: `Token ${getCookie('token')}`,
+              Authorization: `Bearer ${getCookie('token')}`,
             },
           },
         )

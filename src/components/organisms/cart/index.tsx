@@ -7,7 +7,7 @@ import { Trash2 as Trash } from 'lucide-react'
 import InputField from '@/components/atoms/inputs'
 import PaymentWithQueryClientProvider from '@/components/molecules/payment'
 import { hasCookie, getCookie } from 'cookies-next'
-import { api } from '@/utils/api'
+import { api, api2, api3 } from '@/utils/api'
 import Freight_router from '@/components/molecules/freight_router'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -127,7 +127,7 @@ export function LocalStorageData() {
 
   const handlePostOrder = () => {
     const headers = {
-      Authorization: `Token ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`,
       'Content-Type': 'application/json',
     }
 
@@ -153,7 +153,7 @@ export function LocalStorageData() {
             products: selectedProducts,
           }
 
-    api
+    api3
       .post('/orders/', orderData, { headers })
       .then((response) => {
         // Processar a resposta do servidor, se necessário
@@ -240,9 +240,9 @@ export function LocalStorageData() {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const response = await api.get('/addresses/', {
+        const response = await api3.get('/addresses/', {
           headers: {
-            Authorization: `Token ${accessToken}`,
+            Authorization: `Bearer ${accessToken}`,
           },
         })
         setAddresses(response.data)
@@ -264,15 +264,26 @@ export function LocalStorageData() {
             </div>
           </article>
           <article className="mt-2 flex flex-col justify-start">
+            {/* {localStorageItems.map(async (item, index) => { */}
             {localStorageItems.map((item, index) => {
+              // const imageResponse = await api.get(
+              //   `/2/products/${item.value.product.id}/images`,
+              // )
+
+              // const images = imageResponse.data
+
               const value = item.value
               const product = value.product || {}
+              const images = value.images
+              // const firstImage = '/static/smartphone.jpg'
 
               const firstImage =
-                product.images && product.images.length > 0
-                  ? product.images[0].image
-                  : null
+                images && images.length > 0 ? images[0].image : null
 
+              // const firstImage =
+              //   product.images && product.images.length > 0
+              //     ? product.images[0].image
+              //     : null
               const isChecked = JSON.parse(
                 localStorage.getItem('orders') || '[]',
               ).includes(item.key)
@@ -287,7 +298,7 @@ export function LocalStorageData() {
                       <div className="items-center">
                         <Link href={`products / ${item.key} `} className="item">
                           <Image
-                            src={firstImage}
+                            src={'http://127.0.0.1:8002/' + firstImage}
                             width={'50'}
                             height={'50'}
                             className="max-w-[50px] rounded-xl"

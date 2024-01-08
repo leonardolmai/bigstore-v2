@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Addresses } from '@/types/addresses'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import { getCookie } from 'cookies-next'
@@ -7,8 +7,8 @@ import { getCookie } from 'cookies-next'
 // Função para buscar os cartões da API
 async function fetchAddresses() {
   try {
-    const response = await api.get('/addresses/', {
-      headers: { Authorization: `Token ${getCookie('token')}` },
+    const response = await api2.get('/addresses/', {
+      headers: { Authorization: `Bearer ${getCookie('token')}` },
     })
     const fetchedAddresses: Addresses[] = response.data
     return fetchedAddresses
@@ -43,9 +43,9 @@ export function User_Addresses({ screens }) {
   useEffect(() => {
     const fetchAddresses = async () => {
       try {
-        const response = await api.get('/addresses/', {
+        const response = await api2.get('/addresses/', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         const fetchedAddresses = response.data
@@ -59,7 +59,7 @@ export function User_Addresses({ screens }) {
 
   const handleCreateAddress = async () => {
     try {
-      const response = await api.post(
+      const response = await api2.post(
         '/addresses/',
         {
           postal_code: updatedpostal_code,
@@ -72,7 +72,7 @@ export function User_Addresses({ screens }) {
         },
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -104,12 +104,12 @@ export function User_Addresses({ screens }) {
       }
 
       // Fazer a requisição PATCH para atualizar o endereço
-      const response = await api.patch(
+      const response = await api2.patch(
         `/addresses/${selectaddress.id}/`,
         updatedAddressData,
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -181,9 +181,9 @@ export function User_Addresses({ screens }) {
 
   const fetchAddressesDetails = async (addressesId: number) => {
     try {
-      const response = await api.get(`/addresses/${addressesId}`, {
+      const response = await api2.get(`/addresses/${addressesId}`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
 
@@ -216,9 +216,9 @@ export function User_Addresses({ screens }) {
 
   const toformDelete = async (addressesId: number) => {
     try {
-      const response = await api.delete(`/addresses/${addressesId}`, {
+      const response = await api2.delete(`/addresses/${addressesId}`, {
         headers: {
-          Authorization: `Token ${getCookie('token')}`,
+          Authorization: `Bearer ${getCookie('token')}`,
         },
       })
       window.location.href = '/account'

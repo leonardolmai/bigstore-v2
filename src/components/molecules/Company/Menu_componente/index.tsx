@@ -1,6 +1,6 @@
 import { Calendar } from 'lucide-react'
 import React, { useState, useEffect } from 'react'
-import { api } from '@/utils/api'
+import { api, api2 } from '@/utils/api'
 import { Company } from '@/types/companies'
 import { getCookie } from 'cookies-next'
 import company from '@/app/company/page'
@@ -14,9 +14,9 @@ export default function Menu_componente({ screens, alingLists }) {
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
-        const response = await api.get('/companies', {
+        const response = await api2.get('/companies', {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
         setCompanies(response.data)
@@ -70,9 +70,9 @@ export default function Menu_componente({ screens, alingLists }) {
   useEffect(() => {
     const fetchCompanyStatus = async (id) => {
       try {
-        const response = await api.get(`/companies/${id}/`, {
+        const response = await api2.get(`/companies/${id}/`, {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         })
 
@@ -101,7 +101,7 @@ export default function Menu_componente({ screens, alingLists }) {
 
   const activateCompany = async (companyj) => {
     try {
-      await api.put(
+      await api2.patch(
         `/companies/${companyj.id}/`,
         {
           id: companyj?.id,
@@ -113,7 +113,7 @@ export default function Menu_componente({ screens, alingLists }) {
         },
         {
           headers: {
-            Authorization: `Token ${getCookie('token')}`,
+            Authorization: `Bearer ${getCookie('token')}`,
           },
         },
       )
@@ -121,6 +121,7 @@ export default function Menu_componente({ screens, alingLists }) {
       setCompanies((prevCompanies) =>
         prevCompanies.map((company) => {
           if (company.id === companyj.id) {
+            // return { ...company, is_approved: true }
             return { ...company, is_active: true }
           }
           return company
